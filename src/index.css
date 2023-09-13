@@ -1,0 +1,217 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic");
+
+* {
+    font-family: Poppins;
+    outline: none;
+}
+
+*:focus {
+    outline: none;
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+    display: block;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #afafaf;
+    border-radius: 3px;
+}
+
+textarea {
+    resize: none
+}
+
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.navbar::-webkit-scrollbar {
+    display: none;
+}
+
+.inactive-navbar {
+    display: none;
+}
+
+.form-input {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-input:focus {
+    cursor: auto;
+    background-color: white;
+    padding: 13px 60px 13px 45px;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-input:focus ~ .checkbox {
+    display: block;
+}
+
+.form-input:focus ~ .select {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slide-in {
+    width: 550px;
+    animation: slideIn 0.25s ease-in-out;
+}
+
+.qcont:first-letter {
+    text-transform: capitalize
+}
+
+.navbar-link:hover .dots-btn {
+    opacity: 1;
+}
+
+.task-item:hover .dots-btn {
+    transition: all 0.2s ease-in-out;
+    visibility: visible;
+    opacity: 1;
+}
+
+.task-item:hover .color-box,
+.task-item:hover .date-box,
+.task-item:hover .is-note {
+    display: none;
+}
+
+@media screen and (min-width: 1090px) {
+    .second-navbar {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1090px) {
+    .first-navbar {
+        display: none;
+    }
+
+    .second-navbar {
+        display: block;
+    }
+
+    .todo-container {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 665px) {
+    .todos-container {
+        padding-left: 0;
+    }
+
+    .heading {
+        width: 900px;
+        padding-left: 0;
+    }
+
+    .heading-container {
+        left: 0;
+        padding-left: 10px;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        margin-top: -50px;
+        transform: translateY(-20px);
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+        margin-top: 0;
+        transform: translateY(0);
+    }
+}
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+
+        --ring: 215 20.2% 65.1%;
+
+        --radius: 0.5rem;
+    }
+
+    .dark {
+        --background: 220, 8%, 15%;
+        --foreground: 0 0% 98%;
+
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+
+        --popover: 220, 8%, 15%;
+        --popover-foreground: 0 0% 98%;
+
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+
+        --accent: 220, 10%, 23%;
+        --accent-foreground: 0 0% 98%;
+
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 85.7% 97.3%;
+
+        /*--ring: 240 3.7% 15.9%;*/
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
