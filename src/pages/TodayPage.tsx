@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo } from "react";
 import ListsContext from "../context/list-context";
 
 import TaskItem from "../components/TaskItem";
-import FormInput from "../components/FromInput";
+import FormInput from "../components/FormInput";
 import { Calendar, CloudSun } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -23,12 +23,12 @@ const TodayPage = () => {
           color={item.color}
           isActive={item.isActive}
           date={item.date}
-          listId={item.listId || 0}
+          listId={item.listId || "0"}
           taskComment={item.taskComment}
           isHome={true}
           isToday={true}
-          submitted={false}
           itemsLength={todayItems.length}
+          emoji={item.emoji}
         />
       ));
     }

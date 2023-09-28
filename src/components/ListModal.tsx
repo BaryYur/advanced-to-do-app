@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { X } from "lucide-react";
 
 interface AlertModalProps {
-  listId?: number,
+  listId?: string,
   isOpen: boolean,
   placeholder: string,
   modalTitle: string,
@@ -21,6 +21,7 @@ interface AlertModalProps {
   listColor?: string,
   newList?: boolean,
   onClose: () => void,
+  listEmoji: string | undefined,
 }
 
 const notify = () => {
@@ -37,12 +38,14 @@ export const ListModal: React.FC<AlertModalProps> = ({
   listColor,
   modalTitle,
   placeholder,
-  newList
+  newList,
+  listEmoji,
 }) => {
   const navigate = useNavigate();
   const { createList, isListNameNew, changeList, todoLists } = useContext(ListsContext);
   const [listName, setListName] = useState(name || "");
-  const [colorInput, setColorInput] = useState(listColor || "#9195a4")
+  const [colorInput, setColorInput] = useState(listColor || "#9195a4");
+  const [emoji, setEmoji] = useState<string | undefined>(listEmoji);
 
   const submitHandler = (event: any) => {
     event.preventDefault();
@@ -58,10 +61,11 @@ export const ListModal: React.FC<AlertModalProps> = ({
       }
 
       const newList = {
-        id: Math.random(),
+        id: `list-${Math.random()}`,
         color: colorInput,
         listName: listName.trim(),
         items: [],
+        emoji: emoji,
       }
 
       createList(newList);
@@ -75,7 +79,7 @@ export const ListModal: React.FC<AlertModalProps> = ({
       }
 
       if (!arr.includes(listName)) {
-        changeList(listId ?? 0, listName.trim(), colorInput);
+        changeList(listId ?? "0", listName.trim(), colorInput, emoji);
       } else {
         toast.error("Its should be unique name");
 
@@ -86,6 +90,8 @@ export const ListModal: React.FC<AlertModalProps> = ({
     }
 
     setListName("");
+    setEmoji(undefined);
+    setColorInput("#9195a4");
     onClose();
   }
 
@@ -96,7 +102,15 @@ export const ListModal: React.FC<AlertModalProps> = ({
       onClose={onClose}
     >
       <form onSubmit={submitHandler} className="flex gap-2">
-        <IconBox getColor={(color) => setColorInput(color)} color={colorInput} />
+        <IconBox
+          getIcon={(color, emoji) => {
+            setColorInput(color);
+            setEmoji(emoji);
+          }}
+          color={colorInput}
+          emoji={listEmoji}
+          isNew={newList}
+        />
         <Input
           type="text"
           placeholder={placeholder}

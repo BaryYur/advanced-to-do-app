@@ -55,12 +55,12 @@ const CompletedPage = () => {
                 color={item.color}
                 isActive={item.isActive}
                 date={item.date}
-                listId={item.listId || 0}
+                listId={item.listId || ""}
                 taskComment={item.taskComment}
                 isHome={true}
                 isToday={true}
-                submitted={false}
                 itemsLength={completedTasks.length}
+                emoji={item.emoji}
               />
             ))}
             {completedTasks.length === 0 && (

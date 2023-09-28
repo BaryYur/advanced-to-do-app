@@ -18,18 +18,18 @@ import {
 } from "../components/ui/dropdown-menu";
 
 interface TaskItemProps {
-  id: number,
+  id: string,
   index: number,
   title: string,
   isActive: boolean,
   color: string,
   date: string,
-  listId: number,
+  listId: string,
   taskComment: string,
   isHome?: boolean,
   isToday?: boolean,
-  submitted: boolean,
   itemsLength: number,
+  emoji: string | undefined,
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -43,8 +43,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
   taskComment,
   isHome,
   isToday,
-  submitted,
   itemsLength,
+  emoji,
 }) => {
   const {
     todoLists,
@@ -55,13 +55,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
     changeTask,
     uncategorizedItems,
   } = useContext(ListContext);
-  const [shouldAnimate, setShouldAnimate] = useState(false);
   const [listName, setListName] = useState("");
   const [taskTitle, setTaskTitle] = useState(title || "");
   const [isOpenTaskbar, setIsOpenTaskbar] = useState(false);
   const [loading, setLoading] = useState(false);
   const currentDate = useCurrentDate();
-  // const formattedTitle = title.length > 40 ? title.slice(0, 40) + "..." : title;
+  const formattedTitle = title.length > 33 ? title.slice(0, 33) + "..." : title;
 
   const getListName = () => {
     let name = "";
@@ -84,7 +83,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
     }
   }
 
-  const checkTaskHandler = (id: number, color: string) => {
+  const checkTaskHandler = (id: string, color: string) => {
     if (color !== "") {
       for (let todo of todoLists) {
         if (todo.id === listId) {
@@ -128,13 +127,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
     return `${day} ${formattedMonth}`;
   }, [date]);
 
-  const deleteTaskHandler = (id: number, listId: number) => {
-    // if (shouldAnimate) {
-    //   setShouldAnimate(false);
-    //   deleteTask(id, listId);
-    // } else {
-      deleteTask(id, listId);
-    // }
+  const deleteTaskHandler = (id: string, listId: string) => {
+    deleteTask(id, listId);
   }
 
   useEffect(() => {
@@ -144,18 +138,18 @@ const TaskItem: React.FC<TaskItemProps> = ({
   return (
     <div>
       <li
+        id={`task-${index}`}
         className={`
-        // ${submitted && shouldAnimate && index === 0 ? "slide-in" : ""} 
-        ${index === 0 && itemsLength !== 1 && "rounded-t-[13px]"}
-        ${index === itemsLength - 1 && itemsLength !== 1 && "rounded-b-[13px]"}
-        ${itemsLength === 1 && "rounded-[13px]"}
-        ${itemsLength > 1 && "rounded-[6px]"}
-        w-full p-[13px] flex items-center justify-between task-item
-        bg-[white] dark:bg-[#2f343d] cursor-pointer
+          ${index === 0 && itemsLength !== 1 && "rounded-t-[13px]"}
+          ${index === itemsLength - 1 && itemsLength !== 1 && "rounded-b-[13px]"}
+          ${itemsLength === 1 && "rounded-[13px]"}
+          ${itemsLength > 1 && "rounded-[6px]"}
+          w-full p-[13px] flex items-center justify-between task-item
+          bg-[white] dark:bg-[#2f343d] cursor-pointer
       `}
         onClick={() => setIsOpenTaskbar(true)}
       >
-        <div className="flex items-center w-[80%] task-item-title">
+        <div className="flex items-center w-[70%] task-item-title">
           <Checkbox
             className="w-[18px] h-[18px] bg-[#e6e6e6] border-none rounded-[6px]"
             checked={isActive}
@@ -168,10 +162,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
               textDecorationThickness: "1px",
             }}
           >
-            {title}
+            {formattedTitle}
           </label>
         </div>
-        <div className="flex items-center justify-end gap-3 pr-[5px] w-[20%]">
+        <div className="flex items-center justify-end gap-3 pr-[5px] w-[30%]">
           {taskComment !== "" && <div className="text-gray-300 is-note border-2 dark:border-neutral-500 dark:text-neutral-500 p-[3px] rounded-[5px]">
             <AlignLeft size={11} strokeWidth={3} />
           </div>}
@@ -212,7 +206,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
                     onClick={(event) => {
                       event.stopPropagation();
 
-                      deleteTaskHandler(id, listId ?? 0);
+                      deleteTaskHandler(id, listId ?? "");
                     }}
                   >
                     <Trash2 size={15} strokeWidth={2.6} />
@@ -222,12 +216,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          {color !== "" && (
+          {color !== "" && !emoji && (
             <div
               style={{ borderColor: color }}
-              className="rounded-[4px] border-[2.3px] h-[10px] w-[10px] color-box"
+              className="rounded-[4px] border-[2.3px] h-[10px] mx-[4px] w-[10px] color-box"
             />
           )}
+          {emoji && <div className="color-box text-sm">{emoji}</div>}
         </div>
       </li>
 
@@ -241,10 +236,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
         checkTask={checkTask}
         date={date}
         color={color}
+        emoji={emoji}
         comment={taskComment}
         isOpen={isOpenTaskbar}
         onClose={() => setIsOpenTaskbar(false)}
-        onDelete={() => deleteTaskHandler(id, listId ?? 0)}
+        onDelete={() => deleteTaskHandler(id, listId ?? "0")}
       />}
     </div>
   );

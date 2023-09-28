@@ -19,12 +19,12 @@ interface ListsContextType {
   isListNameNew: (listName: string) => boolean;
   updateTodoLists: () => void;
   deleteTodoList: (listName: string) => void;
-  addNewTask: (listName: string, task: string, color: string, listId: number, date: string | undefined, isActive: boolean, taskComment: string) => void;
-  addTask: (listName: string, task: string, color: string, listId: number, date: string | undefined, isActive: boolean, taskComment: string) => void;
-  addNotNewUncategorizedTask: (id: number, task: string, isActive: boolean, taskComment: string, date: string) => void;
-  changeTask: (listId: number, taskId: number, task: string, newDate: string, newComment: string) => void;
-  changeList: (listId: number, listName: string, listColor: string) => void;
-  deleteTask: (id: number, listId: number) => void;
+  addNewTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => void;
+  addTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => void;
+  addNotNewUncategorizedTask: (id: string, task: string, isActive: boolean, taskComment: string, date: string) => void;
+  changeTask: (listId: string, taskId: string, task: string, newDate: string, newComment: string) => void;
+  changeList: (listId: string, listName: string, listColor: string, listEmoji: string | undefined) => void;
+  deleteTask: (id: string, listId: string) => void;
 }
 
 const ListsContext = React.createContext({
@@ -36,12 +36,12 @@ const ListsContext = React.createContext({
   removeAllTasks: (isHome: boolean, isToday: boolean, isCompleted: boolean, listName:string) => {},
   updateTodoLists: () => {},
   deleteTodoList: (listName: string) => {},
-  addNewTask: (listName: string, task: string, color: string, listId: number, date: string | undefined, isActive: boolean, taskComment: string) => {},
-  addTask: (listName: string, task: string, color: string, listId: number, date: string | undefined, isActive: boolean, taskComment: string) => {},
-  addNotNewUncategorizedTask: (id: number, task: string, isActive: boolean, taskComment: string, date: string) => {},
-  changeTask: (listId: number, taskId: number, task: string, newDate: string,  newComment: string) => {},
-  changeList: (listId: number, listName: string, listColor: string) => {},
-  deleteTask: (id: number, listId: number) => {},
+  addNewTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
+  addTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
+  addNotNewUncategorizedTask: (id: string, task: string, isActive: boolean, taskComment: string, date: string) => {},
+  changeTask: (listId: string, taskId: string, task: string, newDate: string,  newComment: string) => {},
+  changeList: (listId: string, listName: string, listColor: string, listEmoji: string | undefined) => {},
+  deleteTask: (id: string, listId: string) => {},
 } as ListsContextType);
 
 export const ListProvider = ({ children } : { children: React.ReactNode }) => {
@@ -62,10 +62,10 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     let arr = [];
 
     for (let item of todoLists) {
-      arr.push(item.listName);
+      arr.push(item.listName.toLowerCase());
     }
 
-    return arr.includes(listName);
+    return arr.includes(listName.toLowerCase());
   }
 
   const getHomeTodoItems = () => {
@@ -131,17 +131,27 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     getHomeTodoItems();
   }
 
-  const addNewTask = (listName: string, task: string, color: string, listId: number, date: string, isActive: boolean, taskComment: string) => {
+  const addNewTask = (
+    listName: string,
+    task: string,
+    color: string,
+    listId: string,
+    date: string | undefined,
+    isActive: boolean,
+    taskComment: string,
+    emoji: string | undefined,
+  ) => {
     for (let item of todoLists) {
       if (item.listName.toLowerCase() === listName.toLowerCase()) {
         item.items.unshift({
-          id: Math.random(),
+          id: `task-${Math.random()}`,
           title: task,
           isActive: isActive,
           color: color,
           taskComment: taskComment,
           date: date === undefined ? "" : date,
           listId: listId,
+          emoji: emoji,
         });
       }
     }
@@ -151,10 +161,10 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     getTodayTodoItems();
   }
 
-  const deleteTask = (id: number, listId: number) => {
-    for (let item of todoLists) {
-      if (item.id === listId) {
-        item.items = item.items.filter(task => task.id !== id);
+  const deleteTask = (id: string, listId: string) => {
+    for (let list of todoLists) {
+      if  (list.id === listId) {
+        list.items = list.items.filter(task => task.id !== id);
       }
     }
 
@@ -172,19 +182,20 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     getTodayTodoItems();
   }
 
-  const addTask = (listName: string, task: string, color: string, listId: number, date: string, isActive: boolean, taskComment: string) => {
+  const addTask = (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {
     if (listName !== "") {
-      addNewTask(listName, task, color, listId, date, isActive, taskComment);
+      addNewTask(listName, task, color, listId, date, isActive, taskComment, emoji);
     } else {
       setUncategorizedItems(prevItem => {
         return [
           {
-            id: Math.random(),
+            id: `task-${Math.random()}`,
             title: task,
             isActive: false,
             color: "",
             taskComment: "",
             date: date === undefined ? "" : date,
+            emoji: undefined,
           },
           ...prevItem,
         ];
@@ -204,6 +215,7 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
           color: "",
           taskComment: taskComment,
           date: date === undefined ? "" : date,
+          emoji: undefined,
         },
         ...prevItem,
       ];
@@ -212,8 +224,8 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     localStorage.setItem("uncategorizedItems", JSON.stringify(uncategorizedItems));
   }
 
-  const changeTask = (listId: number, taskId: number, task: string, newDate: string, newComment: string) => {
-    if (listId !== 0) {
+  const changeTask = (listId: string, taskId: string, task: string, newDate: string, newComment: string) => {
+    if (listId !== "0") {
       for (let list of todoLists) {
         if (list.id === listId) {
           for (let taskItem of list.items) {
@@ -241,14 +253,16 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     getTodayTodoItems();
   }
 
-  const changeList = (listId: number, listName: string, listColor: string) => {
+  const changeList = (listId: string, listName: string, listColor: string, listEmoji: string | undefined) => {
     for (let list of todoLists) {
       if (list.id === listId) {
         list.listName = listName;
         list.color = listColor;
+        list.emoji = listEmoji;
 
         for (let item of list.items) {
           item.color = listColor;
+          item.emoji = listEmoji;
         }
       }
     }

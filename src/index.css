@@ -61,7 +61,6 @@ textarea::-webkit-scrollbar {
 }
 
 .slide-in {
-    width: 550px;
     animation: slideIn 0.25s ease-in-out;
 }
 
@@ -124,21 +123,18 @@ textarea::-webkit-scrollbar {
 
 @keyframes slideIn {
     0% {
-        opacity: 0;
-        margin-top: -50px;
-        transform: translateY(-20px);
+        transform: translateY(-50px);
     }
 
-    50% {
-        opacity: 0.6;
+    60% {
+        transform: translateY(8px);
     }
 
     100% {
-        opacity: 1;
-        margin-top: 0;
         transform: translateY(0);
     }
 }
+
 
 @layer base {
     :root {
@@ -169,7 +165,7 @@ textarea::-webkit-scrollbar {
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 210 40% 98%;
 
-        --ring: 215 20.2% 65.1%;
+        /*--ring: 215 20.2% 65.1%;*/
 
         --radius: 0.5rem;
     }
@@ -214,4 +210,19 @@ textarea::-webkit-scrollbar {
     body {
         @apply bg-background text-foreground;
     }
+}
+
+em-emoji-picker {
+    --background-rgb: 85, 170, 255;
+    --border-radius: 24px;
+    --category-icon-size: 17px;
+    --color-border-over: rgba(0, 0, 0, 0.1);
+    --color-border: rgba(0, 0, 0, 0.05);
+    --font-family: "Poppins";
+    --font-size: 14px;
+    --rgb-accent: 37, 99, 235;
+    --rgb-background: rgba(0, 0, 0, 0.05);
+    --rgb-color: 59, 130, 246;
+    --rgb-input: rgba(0, 0, 0, 0.05);
+    --shadow: none;
 }

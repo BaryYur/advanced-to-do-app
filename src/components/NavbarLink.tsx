@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import ListsContext from "../context/list-context";
 
@@ -17,13 +17,15 @@ import { ListModal } from "../components/ListModal";
 import { Home, Calendar, CheckSquare, MoreVertical, Delete, Trash2, Pencil } from "lucide-react";
 
 interface NavbarLinkProps {
-  listId?: number,
+  listId?: string,
   path: string,
   color: string,
   isHome?: boolean,
   isToday?: boolean,
   isCompleted?: boolean,
   counter: number,
+  onCloseBar: () => void,
+  emoji?: string | undefined,
 }
 
 const NavbarLink: React.FC<NavbarLinkProps> = ({
@@ -33,14 +35,17 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
   isHome,
   isToday,
   isCompleted,
-  counter
+  counter,
+  onCloseBar,
+  emoji,
 }) => {
+  const navigate = useNavigate();
   const { deleteTodoList, removeAllTasks } = useContext(ListsContext);
   const [activeLink, setActiveLink] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenListModal, setIsOpenListModal] = useState(false);
 
-  const listName = path.length > 17 ? path.slice(0, 23) + "..." : path;
+  const listName = path.length > 17 ? path.slice(0, 20) + "..." : path;
 
   return (
     <div>
@@ -56,6 +61,7 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
         }}
       >
         <div
+          // onClick={() => onCloseBar()}
           className={`
             ${activeLink && "dark:bg-[#353941] bg-[rgba(222, 222, 222, 0.8)]"}
             flex justify-between items-center navbar-link
@@ -63,12 +69,13 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
           `}
         >
           <div className="flex items-center gap-2">
-            {!isHome && !isToday && !isCompleted && (
+            {!isHome && !isToday && !isCompleted && !emoji && (
               <div
                 style={{ borderColor: color }}
                 className="rounded-[4px] border-[2.3px] h-[10px] w-[10px] max-h-[10px]"
               />
             )}
+            {emoji && <div className="text-[13px] ml-[-2px]">{emoji}</div>}
             {activeLink && <div
               className="w-[110px] h-full absolute left-0 opacity-[0.08]"
               style={{
@@ -113,6 +120,7 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
                     className="cursor-pointer flex items-center gap-2"
                     onClick={(event) => {
                       event.preventDefault();
+                      event.stopPropagation();
 
                       if (isHome) {
                         removeAllTasks(true, false, false, "");
@@ -183,6 +191,7 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
         placeholder="Change name"
         listColor={color}
         name={path}
+        listEmoji={emoji}
       />
     </div>
   );

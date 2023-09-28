@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ListsContext from "../context/list-context";
 
 import TaskItem from "../components/TaskItem";
-import FormInput from "../components/FromInput";
+import FormInput from "../components/FormInput";
 import { CloudSun } from "lucide-react";
 
 import toast, { Toaster } from "react-hot-toast";
@@ -56,10 +56,11 @@ const ToDoPage = () => {
                  backdropFilter: "blur(5px)",
                }}
           >
-            <div
+            {!currentTodo.emoji && <div
               style={{ borderColor: currentTodo.color }}
-              className="rounded-[8px] border-[3px] min-w-[20px] items-start h-[20px] w-[20px]"
-            />
+              className="rounded-[8px] border-[3px] min-w-[20px] items-start h-[20px] w-[20px] mr-[-5px]"
+            />}
+            {currentTodo.emoji && <div className="text-[22px] mr-[-10px] ml-[-5px]">{currentTodo.emoji}</div>}
             <div>
               <h1 className="qcont text-[25px] ml-[15px]">{params.todo}</h1>
             </div>
@@ -96,10 +97,10 @@ const ToDoPage = () => {
                 color={item.color}
                 isActive={item.isActive}
                 date={item.date}
-                listId={item.listId || 0}
+                listId={item.listId || ""}
                 taskComment={item.taskComment}
-                submitted={false}
                 itemsLength={currentTodo.items.length}
+                emoji={currentTodo.emoji}
               />
             ))}
             {isCurrentTodoLoaded && currentTodo.items.length === 0 && (

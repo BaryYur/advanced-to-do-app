@@ -42,15 +42,23 @@ const FormInput = ({ path }: { path: string | undefined }) => {
     if (selectValue !== "") {
       for (let list of todoLists) {
         if (list.listName.toLowerCase() === selectValue) {
-          addTask(list.listName, task, list.color, list.id, taskDate, false, "");
+          addTask(list.listName, task, list.color, list.id, taskDate, false, "", list.emoji);
         }
       }
     } else {
-      addTask("", task, "", 0, taskDate, false, "");
+      addTask("", task, "", "0", taskDate, false, "", undefined);
     }
 
     setTask("");
     // setActiveInput(false);
+
+    // setTimeout(() => {
+    //   document.getElementById("task-0").classList.add("slide-in");
+    // }, 10);
+    //
+    // setTimeout(() => {
+    //   document.getElementById("task-0").classList.remove("slide-in");
+    // }, 1000);
   }
 
   useEffect(() => {
@@ -116,14 +124,15 @@ const FormInput = ({ path }: { path: string | undefined }) => {
                   value={todo.listName.toLowerCase()}
                 >
                   <div className="text-xs font-semibold flex justify-start items-center gap-1.5">
-                    <div style={{ borderColor: todo.color }} className="border-[2.3px] w-[9px] h-[9px] rounded-[3.5px]" />
+                    {!todo.emoji && <div style={{ borderColor: todo.color }} className="border-[2.3px] ml-[2px] w-[9px] h-[9px] rounded-[3.5px]" />}
+                    {todo.emoji && <div className="text-[11px]">{todo.emoji}</div>}
                     {todo.listName.length > 25 ? todo.listName.slice(0, 24) + "..." : todo.listName}
                   </div>
                 </SelectItem>
               ))}
               <SelectItem value="">
                 <div className="flex items-center text-xs font-semibold gap-1.5 text-s">
-                  <span className="border-gray-300 border-[2.3px] w-[9px] h-[9px] rounded-[3.5px] block" />
+                  <span className="ml-[2px] border-gray-300 border-[2.3px] w-[9px] h-[9px] rounded-[3.5px] block" />
                   No list
                 </div>
               </SelectItem>

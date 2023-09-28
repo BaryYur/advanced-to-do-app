@@ -12,19 +12,21 @@ import {
   SelectTrigger,
   SelectValue
 } from "../components/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import { Calendar } from "../components/ui/calendar";
 
 import { CalendarDays, X } from "lucide-react";
 
 interface TaskbarProps {
-  listId: number,
+  listId: string,
   listName: string,
-  taskId: number,
+  taskId: string,
   task: string,
   isOpen: boolean,
   checked: boolean,
   date: string,
   color: string,
+  emoji: string | undefined,
   comment: string,
   checkTask: (event: any) => void,
   onClose: () => void,
@@ -40,6 +42,7 @@ const TaskBar: React.FC<TaskbarProps> = ({
   checked,
   date,
   color,
+  emoji,
   comment,
   checkTask,
   onClose,
@@ -54,7 +57,6 @@ const TaskBar: React.FC<TaskbarProps> = ({
   const [taskDate, setTaskDate] = useState<Date | undefined>();
   const [currentDate, setCurrentDate] = useState(date);
   const [activeDate, setActiveDate] = useState(true);
-  const [activeCalendar, setActiveCalendar] = useState(false);
 
   const taskInputHandler = (event: any) => {
     setCurrentTask(event.target.value);
@@ -114,7 +116,7 @@ const TaskBar: React.FC<TaskbarProps> = ({
 
     if (listName !== selectValue && selectValue !== "") {
       let newColor = "";
-      let newListId = 0;
+      let newListId = "0";
 
       for (let list of todoLists) {
         if (list.listName === selectValue) {
@@ -123,7 +125,7 @@ const TaskBar: React.FC<TaskbarProps> = ({
         }
       }
 
-      addTask(selectValue, currentTask, newColor, newListId, finalDate, checked, taskComment);
+      addTask(selectValue, currentTask, newColor, newListId, finalDate, checked, taskComment, emoji);
       onDelete();
     } else if (selectValue !== "" && listName !== "") {
       changeTask(listId, taskId, currentTask, finalDate, taskComment);
@@ -134,8 +136,8 @@ const TaskBar: React.FC<TaskbarProps> = ({
   }
 
   useEffect(() => {
-    taskTextarea();
     formattedDate();
+    // taskTextarea();
   }, [currentTask, activeInput, currentDate, taskDate]);
 
   useEffect(() => {
@@ -182,7 +184,8 @@ const TaskBar: React.FC<TaskbarProps> = ({
               />
               <textarea
                 id="task-input"
-                rows={activeInput ? taskRows : 1}
+                // rows={activeInput ? taskRows : 1}
+                rows={activeInput ? 5 : 1}
                 value={activeInput || currentTask.length <= 20 ? currentTask : currentTask.slice(0, 20) + "..."}
                 onChange={taskInputHandler}
                 className="
@@ -194,6 +197,7 @@ const TaskBar: React.FC<TaskbarProps> = ({
                 }}
                 onFocus={() => {
                   setActiveInput(true);
+
                   taskTextarea();
                 }}
                 onBlur={() => setActiveInput(false)}
@@ -217,15 +221,16 @@ const TaskBar: React.FC<TaskbarProps> = ({
                               key={Math.random()}
                               value={todo.listName}
                             >
-                              <div className="text-s flex justify-start items-center gap-1.5">
-                                <div style={{ borderColor: todo.color }} className="border-[2.3px] min-w-[10px] w-[10px] h-[10px] rounded-[4px]" />
+                              <div className="text-xs font-semibold flex justify-start items-center gap-1.5 mr-[5px]">
+                                {!todo.emoji && <div style={{ borderColor: todo.color }} className="border-[2.3px] ml-[2px] min-w-[10px] w-[10px] h-[10px] rounded-[4px]" />}
+                                {todo.emoji && <div className="text-[11px]">{todo.emoji}</div>}
                                 {todo.listName.length > 19 ? todo.listName.slice(0, 19) + "..." : todo.listName}
                               </div>
                             </SelectItem>
                           ))}
                           <SelectItem value="">
-                            <div className="flex items-center gap-1.5 text-s">
-                              <span className="border-gray-300 border-[2.3px] w-[10px] h-[10px] rounded-[4px] block" />
+                            <div className="text-xs font-semibold flex items-center gap-1.5 text-s">
+                              <span className="border-gray-300 border-[2.3px] ml-[2px] w-[10px] h-[10px] rounded-[4px] block" />
                               No list
                             </div>
                           </SelectItem>
@@ -237,37 +242,32 @@ const TaskBar: React.FC<TaskbarProps> = ({
 
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-400">Date</div>
-                  <div className="relative">
-                    <Button
-                      onClick={() => setActiveCalendar(true)}
-                      onBlur={() => setActiveCalendar(false)}
-                      className="h-[30px] dark:bg-[#353941] dark:text-neutral-300 text-xs bg-white hover:bg-white text-gray-700 px-[9px]"
-                    >
-                      <CalendarDays size={16} strokeWidth={3} />
-                      {currentDate !== "" && activeDate && <span className="ml-[5px]">{currentDate}</span>}
-                    </Button>
-                    <div
-                      className={`
-                        ${activeCalendar && "visible opacity-1"}
-                        ${!activeCalendar && "invisible opacity-0"}
-                        bg-white absolute right-0 top-[45px] transition-all
-                        shadow rounded-[8px] dark:bg-[#232529]
-                      `}
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={taskDate}
-                        onSelect={(date) => {
-                          setTaskDate(date);
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className="h-[30px] dark:bg-[#353941] dark:text-neutral-300 text-xs bg-white hover:bg-white text-gray-700 px-[9px]"
+                        >
+                          <CalendarDays size={16} strokeWidth={3} />
+                          {currentDate !== "" && activeDate && <span className="ml-[5px]">{currentDate}</span>}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="rounded-[8px] absolute right-[-20px] top-[12px]">
+                        <Calendar
+                          mode="single"
+                          selected={taskDate}
+                          onSelect={(date) => {
+                            setTaskDate(date);
 
-                          if (date) {
-                            setActiveDate(true);
-                          } else {
-                            setActiveDate(false);
-                          }
-                        }}
-                      />
-                    </div>
+                            if (date) {
+                              setActiveDate(true);
+                            } else {
+                              setActiveDate(false);
+                            }
+                          }}
+                        />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               </div>

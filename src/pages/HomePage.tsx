@@ -5,7 +5,7 @@ import useCurrentDate from "../hooks/useCurrentDate";
 import ListsContext from "../context/list-context";
 
 import TaskItem from "../components/TaskItem";
-import FormInput from "../components/FromInput";
+import FormInput from "../components/FormInput";
 import { CloudSun } from "lucide-react";
 
 import toast, { Toaster } from "react-hot-toast";
@@ -47,12 +47,12 @@ const HomePage = () => {
           color={item.color}
           isActive={item.isActive}
           date={item.date}
-          listId={item.listId || 0}
+          listId={item.listId || "0"}
           taskComment={item.taskComment}
           isHome={true}
           isToday={false}
           itemsLength={homeItems.length}
-          submitted={false}
+          emoji={item.emoji}
         />
       ));
     }
@@ -70,7 +70,7 @@ const HomePage = () => {
         <div className="flex items-center">
           <div className="
               flex items-center justify-center fixed z-[2] heading-container
-              h-[150px] pt-[75px] top-0 bg-[rgba(255,255,255, 0.3)]
+              h-[150px] pt-[55px] top-0 bg-[rgba(255,255,255, 0.3)]
             "
                style={{
                  backdropFilter: "blur(5px)",
@@ -100,7 +100,7 @@ const HomePage = () => {
             }}
           />
         </div>
-        <div className="pt-[85px] pl-[30px] relative w-full todos-container">
+        <div className="pt-[75px] pl-[30px] relative w-full todos-container">
           <FormInput path="home" />
 
           <ul className="flex flex-col gap-1 mt-[16px] w-full">

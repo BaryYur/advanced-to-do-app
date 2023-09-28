@@ -6,7 +6,7 @@ import NavbarLink from "./NavbarLink";
 import { ListModal } from "./ListModal";
 import { Plus } from "lucide-react";
 
-const Navbar = ({ isActive }: { isActive: boolean }) => {
+const Navbar = ({ isActive, closeNavbar }: { isActive: boolean, closeNavbar: () => void }) => {
   const { todoLists, homeItems, todayItems, completedTasks} = useContext(ListsContext);
   const [openModal, setOpenModal] = useState(false);
 
@@ -34,9 +34,9 @@ const Navbar = ({ isActive }: { isActive: boolean }) => {
       `}
     >
       <ul className="flex flex-col">
-        <NavbarLink path="Home" isHome color="" counter={homeItems.length} />
-        <NavbarLink path="Today" isToday color="" counter={todayItems.length} />
-        <NavbarLink path="Completed" isCompleted color="" counter={completedTasks.length} />
+        <NavbarLink path="Home" onCloseBar={closeNavbar} isHome color="" counter={homeItems.length} />
+        <NavbarLink path="Today" onCloseBar={closeNavbar} isToday color="" counter={todayItems.length} />
+        <NavbarLink path="Completed" onCloseBar={closeNavbar} isCompleted color="" counter={completedTasks.length} />
         {todoLists.map(todoNav => (
           <NavbarLink
             key={Math.random()}
@@ -44,6 +44,8 @@ const Navbar = ({ isActive }: { isActive: boolean }) => {
             path={todoNav.listName}
             color={todoNav.color}
             counter={todoNav.items.length}
+            onCloseBar={closeNavbar}
+            emoji={todoNav.emoji}
           />
         ))}
       </ul>
@@ -71,6 +73,7 @@ const Navbar = ({ isActive }: { isActive: boolean }) => {
         onClose={closeModalHandler}
         modalTitle="Add new list"
         placeholder="List name"
+        listEmoji={undefined}
       />
     </div>
   );

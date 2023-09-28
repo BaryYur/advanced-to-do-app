@@ -22,7 +22,7 @@ const SecondNavbar = () => {
         className="w-full h-full z-[5] absolute left-0 top-0"
         onClick={() => setActiveNavbar(false)}
       />}
-      <Navbar isActive={activeNavbar} />
+      <Navbar isActive={activeNavbar} closeNavbar={() => setActiveNavbar(false)} />
     </div>
   );
 }
