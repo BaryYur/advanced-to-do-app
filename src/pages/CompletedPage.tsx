@@ -45,11 +45,12 @@ const CompletedPage = () => {
           />
         </div>
         <div className="py-[40px] pl-[30px] relative w-full todos-container">
-          <ul className="flex flex-col gap-1 mt-[16px] w-full">
+          <ul className="flex flex-col gap-[1.2px] mt-[16px] w-full">
             {completedTasks.length > 0 && completedTasks.map((item, index) => (
               <TaskItem
                 key={item.id}
                 id={item.id}
+                styleIndex={index}
                 index={index}
                 title={item.title}
                 color={item.color}

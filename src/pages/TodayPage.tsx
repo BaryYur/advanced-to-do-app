@@ -14,11 +14,12 @@ const TodayPage = () => {
 
   const todayTaskItems = useMemo(() => {
     if (todayItems.length > 0) {
-      return todayItems.map((item, index) => (
+      return todayItems.map((item, index)=> (
         <TaskItem
           key={item.id}
           id={item.id}
-          index={index}
+          styleIndex={index}
+          index={item.index}
           title={item.title}
           color={item.color}
           isActive={item.isActive}
@@ -77,7 +78,7 @@ const TodayPage = () => {
         <div className="py-[40px] pl-[30px] w-full relative z-2 todos-container">
           <FormInput path="today" />
 
-          <ul className="flex flex-col gap-1 mt-[16px] w-full">
+          <ul className="flex flex-col gap-[1.2px] mt-[16px] w-full">
             {todayTaskItems}
             {todayItems.length === 0 && (
               <div className="flex items-center flex-col gap-2 justify-center text-zinc-300 mt-[150px]">

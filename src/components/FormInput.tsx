@@ -18,7 +18,7 @@ import { Calendar } from "../components/ui/calendar";
 import { CalendarDays } from "lucide-react";
 
 const FormInput = ({ path }: { path: string | undefined }) => {
-  const { todoLists, addTask } = useContext(ListsContext);
+  const { todoLists, addTask, uncategorizedItems } = useContext(ListsContext);
   const [task, setTask] = useState("");
   const [selectValue, setSelectValue] = useState("");
   const [date, setDate] = useState<Date | undefined>();
@@ -42,11 +42,11 @@ const FormInput = ({ path }: { path: string | undefined }) => {
     if (selectValue !== "") {
       for (let list of todoLists) {
         if (list.listName.toLowerCase() === selectValue) {
-          addTask(list.listName, task, list.color, list.id, taskDate, false, "", list.emoji);
+          addTask(0, list.listName, task, list.color, list.id, taskDate, false, "", list.emoji);
         }
       }
     } else {
-      addTask("", task, "", "0", taskDate, false, "", undefined);
+      addTask(0, "", task, "", "0", taskDate, false, "", undefined);
     }
 
     setTask("");

@@ -42,7 +42,8 @@ const HomePage = () => {
         <TaskItem
           key={item.id}
           id={item.id}
-          index={index}
+          index={item.index}
+          styleIndex={index}
           title={item.title}
           color={item.color}
           isActive={item.isActive}
@@ -103,7 +104,7 @@ const HomePage = () => {
         <div className="pt-[75px] pl-[30px] relative w-full todos-container">
           <FormInput path="home" />
 
-          <ul className="flex flex-col gap-1 mt-[16px] w-full">
+          <ul className="flex flex-col gap-[1.2px] mt-[16px] w-full">
             {filteredHomeItems}
             {homeItems.length === 0 && (
               <div className="flex items-center flex-col gap-2 justify-center text-zinc-300 mt-[150px]">

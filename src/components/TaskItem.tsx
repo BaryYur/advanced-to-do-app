@@ -20,6 +20,7 @@ import {
 interface TaskItemProps {
   id: string;
   index: number;
+  styleIndex: number;
   title: string;
   isActive: boolean;
   color: string;
@@ -30,12 +31,13 @@ interface TaskItemProps {
   isToday?: boolean;
   itemsLength: number;
   emoji: string | undefined;
-  style?: any,
+  style?: any;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
   id,
   title,
+  styleIndex,
   index,
   isActive,
   date,
@@ -143,8 +145,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
       <li
         id={`task-${index}`}
         className={`
-          ${index === 0 && itemsLength !== 1 && "rounded-t-[13px]"}
-          ${index === itemsLength - 1 && itemsLength !== 1 && "rounded-b-[13px]"}
+          ${styleIndex === 0 && itemsLength !== 1 && "rounded-t-[13px]"}
+          ${styleIndex === itemsLength - 1 && itemsLength !== 1 && "rounded-b-[13px]"}
           ${itemsLength === 1 && "rounded-[13px]"}
           ${itemsLength > 1 && "rounded-[6px]"}
           w-full p-[13px] flex items-center justify-between task-item

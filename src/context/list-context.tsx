@@ -19,9 +19,9 @@ interface ListsContextType {
   isListNameNew: (listName: string) => boolean;
   updateTodoLists: () => void;
   deleteTodoList: (listName: string) => void;
-  addNewTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => void;
-  addTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => void;
-  addNotNewUncategorizedTask: (id: string, task: string, isActive: boolean, taskComment: string, date: string) => void;
+  addNewTask: (index: number, listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => void;
+  addTask: (index: number, listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => void;
+  addNotNewUncategorizedTask: (id: string, index: number, task: string, isActive: boolean, taskComment: string, date: string) => void;
   changeTask: (listId: string, taskId: string, task: string, newDate: string, newComment: string) => void;
   duplicateTask: (index: number, listId: string, title: string, isActive: boolean, color: string, taskComment: string, date: string, emoji: string | undefined) => void;
   changeList: (listId: string, listName: string, listColor: string, listEmoji: string | undefined) => void;
@@ -37,9 +37,9 @@ const ListsContext = React.createContext({
   removeAllTasks: (isHome: boolean, isToday: boolean, isCompleted: boolean, listName:string) => {},
   updateTodoLists: () => {},
   deleteTodoList: (listName: string) => {},
-  addNewTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
-  addTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
-  addNotNewUncategorizedTask: (id: string, task: string, isActive: boolean, taskComment: string, date: string) => {},
+  addNewTask: (index: number, listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
+  addTask: (index: number, listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
+  addNotNewUncategorizedTask: (id: string, index: number, task: string, isActive: boolean, taskComment: string, date: string) => {},
   duplicateTask: (index: number, listId: string, title: string, isActive: boolean, color: string, taskComment: string, date: string, emoji: string | undefined) => {},
   changeTask: (listId: string, taskId: string, task: string, newDate: string,  newComment: string) => {},
   changeList: (listId: string, listName: string, listColor: string, listEmoji: string | undefined) => {},
@@ -134,6 +134,7 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
   }
 
   const addNewTask = (
+    index: number,
     listName: string,
     task: string,
     color: string,
@@ -147,6 +148,7 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
       if (item.listName.toLowerCase() === listName.toLowerCase()) {
         item.items.unshift({
           id: `task-${Math.random()}`,
+          index: index,
           title: task,
           isActive: isActive,
           color: color,
@@ -173,30 +175,62 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     date: string,
     emoji: string | undefined,
   ) => {
-    for (let list of todoLists) {
-      if (list.id === listId) {
-        list.items.splice(index + 1, 0, {
+    if (listId === "0") {
+      setUncategorizedItems(prevItem => {
+        let newArray = [...prevItem];
+
+        newArray.splice (index + 1, 0, {
           id: `task-${Math.random()}`,
+          index: index,
           title: title,
           isActive: isActive,
-          color: color,
+          color: "",
           taskComment: taskComment,
           date: date === undefined ? "" : date,
-          listId: listId,
-          emoji: emoji,
         });
+
+        for (let i = 0; i < newArray.length; i++ ) {
+          newArray[i].index = i;
+        }
+
+        return newArray;
+      });
+    } else {
+      for (let list of todoLists) {
+        if (list.id === listId) {
+          list.items.splice(index + 1, 0, {
+            id: `task-${Math.random()}`,
+            index: index,
+            title: title,
+            isActive: isActive,
+            color: color,
+            taskComment: taskComment,
+            date: date === undefined ? "" : date,
+            listId: listId,
+            emoji: emoji,
+          });
+
+          for (let i = 0; i < list.items.length; i++ ) {
+            list.items[i].index = i;
+          }
+        }
       }
     }
 
     localStorage.setItem("todoLists", JSON.stringify(todoLists));
     getHomeTodoItems();
     getTodayTodoItems();
+    getCompletedTasks();
   }
 
   const deleteTask = (id: string, listId: string) => {
     for (let list of todoLists) {
       if  (list.id === listId) {
         list.items = list.items.filter(task => task.id !== id);
+
+        for (let i = 0; i < list.items.length; i++ ) {
+          list.items[i].index = i;
+        }
       }
     }
 
@@ -214,14 +248,15 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     getTodayTodoItems();
   }
 
-  const addTask = (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {
+  const addTask = (index: number, listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {
     if (listName !== "") {
-      addNewTask(listName, task, color, listId, date, isActive, taskComment, emoji);
+      addNewTask(index, listName, task, color, listId, date, isActive, taskComment, emoji);
     } else {
       setUncategorizedItems(prevItem => {
         return [
           {
             id: `task-${Math.random()}`,
+            index: index,
             title: task,
             isActive: false,
             color: "",
@@ -237,11 +272,12 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     localStorage.setItem("uncategorizedItems", JSON.stringify(uncategorizedItems));
   }
 
-  const addNotNewUncategorizedTask = (id: string, task: string, isActive: boolean, taskComment: string, date: string) => {
+  const addNotNewUncategorizedTask = (id: string, index: number, task: string, isActive: boolean, taskComment: string, date: string) => {
     setUncategorizedItems(prevItem => {
       return [
         {
           id: id,
+          index: index,
           title: task,
           isActive: isActive,
           color: "",

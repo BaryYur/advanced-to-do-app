@@ -92,7 +92,8 @@ const ToDoPage = () => {
               <TaskItem
                 key={item.id}
                 id={item.id}
-                index={index}
+                index={item.index}
+                styleIndex={index}
                 title={item.title}
                 color={item.color}
                 isActive={item.isActive}

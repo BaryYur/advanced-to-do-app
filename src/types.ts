@@ -1,5 +1,6 @@
 export interface Item {
   id: string;
+  index: number;
   title: string;
   color: string;
   isActive: boolean;
