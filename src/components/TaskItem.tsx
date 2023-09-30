@@ -6,7 +6,7 @@ import ListContext from "../context/list-context";
 
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "../components/ui/button";
-import { AlignLeft, Delete, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { AlignLeft, Copy, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import Taskbar from "./Taskbar";
 
 import {
@@ -18,18 +18,19 @@ import {
 } from "../components/ui/dropdown-menu";
 
 interface TaskItemProps {
-  id: string,
-  index: number,
-  title: string,
-  isActive: boolean,
-  color: string,
-  date: string,
-  listId: string,
-  taskComment: string,
-  isHome?: boolean,
-  isToday?: boolean,
-  itemsLength: number,
-  emoji: string | undefined,
+  id: string;
+  index: number;
+  title: string;
+  isActive: boolean;
+  color: string;
+  date: string;
+  listId: string;
+  taskComment: string;
+  isHome?: boolean;
+  isToday?: boolean;
+  itemsLength: number;
+  emoji: string | undefined;
+  style?: any,
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -45,6 +46,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   isToday,
   itemsLength,
   emoji,
+  style,
 }) => {
   const {
     todoLists,
@@ -54,6 +56,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
     deleteTask,
     changeTask,
     uncategorizedItems,
+    duplicateTask,
   } = useContext(ListContext);
   const [listName, setListName] = useState("");
   const [taskTitle, setTaskTitle] = useState(title || "");
@@ -136,7 +139,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   }, [listName]);
 
   return (
-    <div>
+    <>
       <li
         id={`task-${index}`}
         className={`
@@ -146,7 +149,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
           ${itemsLength > 1 && "rounded-[6px]"}
           w-full p-[13px] flex items-center justify-between task-item
           bg-[white] dark:bg-[#2f343d] cursor-pointer
-      `}
+        `}
+        style={style}
         onClick={() => setIsOpenTaskbar(true)}
       >
         <div className="flex items-center w-[70%] task-item-title">
@@ -191,28 +195,35 @@ const TaskItem: React.FC<TaskItemProps> = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="rounded-[10px] absolute right-[-20px] top-[10px]">
               <DropdownMenuGroup>
-                {(
-                  <DropdownMenuItem
-                    className="cursor-pointer flex items-center gap-2"
-                    onClick={() => setIsOpenTaskbar(true)}
-                  >
-                    <Pencil size={15} strokeWidth={2.6} />
-                    <span>Edit</span>
-                  </DropdownMenuItem>
-                )}
-                {(
-                  <DropdownMenuItem
-                    className="cursor-pointer flex items-center gap-2"
-                    onClick={(event) => {
-                      event.stopPropagation();
+                <DropdownMenuItem
+                  className="cursor-pointer flex items-center gap-2"
+                  onClick={() => setIsOpenTaskbar(true)}
+                >
+                  <Pencil size={15} strokeWidth={2.6} />
+                  <span>Edit</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer flex items-center gap-2"
+                  onClick={(event) => {
+                    event.stopPropagation();
 
-                      deleteTaskHandler(id, listId ?? "");
-                    }}
-                  >
-                    <Trash2 size={15} strokeWidth={2.6} />
-                    <span>Delete</span>
-                  </DropdownMenuItem>
-                )}
+                    duplicateTask(index, listId, title, isActive, color, taskComment, date, emoji)
+                  }}
+                >
+                  <Copy size={15} strokeWidth={2.6} />
+                  <span>Duplicate</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer flex items-center gap-2"
+                  onClick={(event) => {
+                    event.stopPropagation();
+
+                    deleteTaskHandler(id, listId ?? "");
+                  }}
+                >
+                  <Trash2 size={15} strokeWidth={2.6} />
+                  <span>Delete</span>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -242,7 +253,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
         onClose={() => setIsOpenTaskbar(false)}
         onDelete={() => deleteTaskHandler(id, listId ?? "0")}
       />}
-    </div>
+    </>
   );
 }
 

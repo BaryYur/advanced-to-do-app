@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 
 import { List } from "../types";
 
@@ -87,7 +87,7 @@ const ToDoPage = () => {
         <div className="pl-[30px] py-[40px] w-full relative todos-container">
           <FormInput path={params.todo} />
 
-          <ul className="flex flex-col gap-1 mt-[16px] w-full">
+          <ul className="flex flex-col gap-[1px] mt-[16px] w-full">
             {isCurrentTodoLoaded && currentTodo.items.map((item, index) => (
               <TaskItem
                 key={item.id}
@@ -103,6 +103,7 @@ const ToDoPage = () => {
                 emoji={currentTodo.emoji}
               />
             ))}
+
             {isCurrentTodoLoaded && currentTodo.items.length === 0 && (
               <div className="flex items-center flex-col gap-2 justify-center text-zinc-300 mt-[150px]">
                 <div>

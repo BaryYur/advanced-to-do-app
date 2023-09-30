@@ -23,6 +23,7 @@ interface ListsContextType {
   addTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => void;
   addNotNewUncategorizedTask: (id: string, task: string, isActive: boolean, taskComment: string, date: string) => void;
   changeTask: (listId: string, taskId: string, task: string, newDate: string, newComment: string) => void;
+  duplicateTask: (index: number, listId: string, title: string, isActive: boolean, color: string, taskComment: string, date: string, emoji: string | undefined) => void;
   changeList: (listId: string, listName: string, listColor: string, listEmoji: string | undefined) => void;
   deleteTask: (id: string, listId: string) => void;
 }
@@ -39,6 +40,7 @@ const ListsContext = React.createContext({
   addNewTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
   addTask: (listName: string, task: string, color: string, listId: string, date: string | undefined, isActive: boolean, taskComment: string, emoji: string | undefined) => {},
   addNotNewUncategorizedTask: (id: string, task: string, isActive: boolean, taskComment: string, date: string) => {},
+  duplicateTask: (index: number, listId: string, title: string, isActive: boolean, color: string, taskComment: string, date: string, emoji: string | undefined) => {},
   changeTask: (listId: string, taskId: string, task: string, newDate: string,  newComment: string) => {},
   changeList: (listId: string, listName: string, listColor: string, listEmoji: string | undefined) => {},
   deleteTask: (id: string, listId: string) => {},
@@ -161,6 +163,36 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     getTodayTodoItems();
   }
 
+  const duplicateTask = (
+    index: number,
+    listId: string,
+    title: string,
+    isActive: boolean,
+    color: string,
+    taskComment: string,
+    date: string,
+    emoji: string | undefined,
+  ) => {
+    for (let list of todoLists) {
+      if (list.id === listId) {
+        list.items.splice(index + 1, 0, {
+          id: `task-${Math.random()}`,
+          title: title,
+          isActive: isActive,
+          color: color,
+          taskComment: taskComment,
+          date: date === undefined ? "" : date,
+          listId: listId,
+          emoji: emoji,
+        });
+      }
+    }
+
+    localStorage.setItem("todoLists", JSON.stringify(todoLists));
+    getHomeTodoItems();
+    getTodayTodoItems();
+  }
+
   const deleteTask = (id: string, listId: string) => {
     for (let list of todoLists) {
       if  (list.id === listId) {
@@ -205,7 +237,7 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
     localStorage.setItem("uncategorizedItems", JSON.stringify(uncategorizedItems));
   }
 
-  const addNotNewUncategorizedTask = (id: number, task: string, isActive: boolean, taskComment: string, date: string) => {
+  const addNotNewUncategorizedTask = (id: string, task: string, isActive: boolean, taskComment: string, date: string) => {
     setUncategorizedItems(prevItem => {
       return [
         {
@@ -333,6 +365,7 @@ export const ListProvider = ({ children } : { children: React.ReactNode }) => {
         deleteTask: deleteTask,
         updateTodoLists: updateTodoLists,
         changeTask: changeTask,
+        duplicateTask: duplicateTask,
         changeList: changeList,
         deleteTodoList: deleteList,
       }}
