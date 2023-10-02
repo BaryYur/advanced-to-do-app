@@ -29,7 +29,7 @@ const App = () => {
       }}
     >
       <SignedIn>
-        <div className="dark:bg-[hsl(var(--background))] absolute z-[1] w-full min-h-full h-auto`">
+        <div className="dark:bg-[hsl(var(--background))] absolute z-[1] w-full min-h-full h-auto">
           <Layout>
             <FirstNavbar />
             <SecondNavbar />

@@ -84,6 +84,36 @@ textarea::-webkit-scrollbar {
     display: none;
 }
 
+.cl-internal-1ee916m {
+    background-color: #232529;
+}
+
+.cl-internal-tr7twz::-webkit-scrollbar,
+.cl-internal-2tn0z0::-webkit-scrollbar {
+    width: 8px;
+    display: block;
+}
+
+.cl-internal-tr7twz::-webkit-scrollbar-thumb,
+.cl-internal-2tn0z0::-webkit-scrollbar-thumb {
+    background-color: #afafaf;
+    border-radius: 3px;
+}
+
+.cl-internal-1w67h8a {
+    background-color: #232529;
+}
+
+.cl-internal-uyu30o,
+.cl-internal-b3fm6y,
+.cl-internal-hegiim {
+    display: none;
+}
+
+.cl-internal-b3fm6y {
+    border: none;
+}
+
 @media screen and (min-width: 1090px) {
     .second-navbar {
         display: none;

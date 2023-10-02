@@ -18,19 +18,19 @@ import { Calendar } from "../components/ui/calendar";
 import { CalendarDays, X } from "lucide-react";
 
 interface TaskbarProps {
-  listId: string,
-  listName: string,
-  taskId: string,
-  task: string,
-  isOpen: boolean,
-  checked: boolean,
-  date: string,
-  color: string,
-  emoji: string | undefined,
-  comment: string,
-  checkTask: (event: any) => void,
-  onClose: () => void,
-  onDelete: () => void,
+  listId: string;
+  listName: string;
+  taskId: string;
+  task: string;
+  isOpen: boolean;
+  checked: boolean;
+  date: string;
+  color: string;
+  emoji: string | undefined;
+  comment: string;
+  checkTask: (event: any) => void;
+  onClose: () => void;
+  onDelete: () => void;
 }
 
 const TaskBar: React.FC<TaskbarProps> = ({
