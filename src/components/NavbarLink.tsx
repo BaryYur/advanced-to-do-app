@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 
+import { useTheme } from "../components/ThemeProvider";
+
 import { NavLink, useNavigate } from "react-router-dom";
 
 import ListsContext from "../context/list-context";
@@ -40,6 +42,7 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
   emoji,
 }) => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { deleteTodoList, removeAllTasks } = useContext(ListsContext);
   const [activeLink, setActiveLink] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -51,19 +54,14 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
     <div>
       <NavLink
         to={`/app/${path.toLowerCase()}`}
-        className="block rounded-[13px] relative z-[1] overflow-hidden"
-        style={({ isActive }) => {
-          setActiveLink(isActive);
-
-          return {
-            backgroundColor: isActive ? "rgb(249 250 251)" : "transparent",
-          }
+        className={({ isActive }) => {
+          return `
+            ${isActive && "active-navbar-link dark:bg-[#353941] bg-[#f9fafb]"} 
+            block rounded-[13px] relative z-[1] overflow-hidden`;
         }}
       >
         <div
-          // onClick={() => onCloseBar()}
           className={`
-            ${activeLink && "dark:bg-[#353941] bg-[rgba(222, 222, 222, 0.8)]"}
             flex justify-between items-center navbar-link
             py-[8px] px-[11px] hover:bg-gray-50 dark:hover:bg-[#353941]
           `}
@@ -75,15 +73,14 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
                 className="rounded-[4px] border-[2.3px] h-[10px] w-[10px] max-h-[10px]"
               />
             )}
-            {emoji && <div className="text-[13px] ml-[-2px]">{emoji}</div>}
-            {activeLink && <div
-              className="w-[110px] h-full absolute left-0 opacity-[0.08]"
+            {emoji && <div className="text-[13px] ml-[-2px] mr-[-4px]">{emoji}</div>}
+            <div
+              className="w-[110px] h-full absolute left-0 opacity-[0.08] nav-color-box hidden"
               style={{
-                  backgroundColor: color,
-                  filter: "blur(10px)",
-                }}
-              />
-            }
+                backgroundColor: color,
+                filter: "blur(10px)",
+              }}
+            />
             {isHome && <Home size={13} strokeWidth={3} />}
             {isToday && <Calendar size={13} strokeWidth={3} />}
             {isCompleted && <CheckSquare size={13} strokeWidth={3} />}
@@ -154,10 +151,9 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
             </DropdownMenu>
             {counter !== 0 && <div
               className={` 
-                ${activeLink && "text-zinc-600"}
-                dark:bg-[#4c5158] dark:text-neutral-400
-                rounded-[5px] px-[7px] py-[2px] text-[11px]
-                text-[#8e939a] font-semibold bg-[#f2f4f9]
+                ${theme === "dark" && "dark-nav-link-counter"}
+                dark:bg-[#4c5158] rounded-[5px] px-[7px] py-[2px] text-[11px]
+                text-[#8e939a] font-semibold bg-[#f2f4f9] nav-link-counter
               `}
             >
               {counter}

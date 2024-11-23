@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useMemo } from "react";
 
-import { useUser } from "@clerk/clerk-react";
-
 import useCurrentDate from "../hooks/useCurrentDate";
 
 import ListsContext from "../context/list-context";
@@ -16,7 +14,6 @@ const notify = () => toast.error("Task can not be empty.");
 
 const HomePage = () => {
   const { homeItems, getHomeTodoItems, uncategorizedItems, getTodayTodoItems } = useContext(ListsContext);
-  const { isLoaded, isSignedIn, user } = useUser();
   const currentDate = useCurrentDate();
 
   const currentD = new Date();
@@ -81,7 +78,7 @@ const HomePage = () => {
                }}
           >
             <div className="pl-[30px] heading w-[700px]">
-              <h1 className="qcont text-[25px]">Hello {user?.firstName}</h1>
+              <h1 className="qcont text-[25px]">Home</h1>
               <div className="text-gray-400 text-[21px]">
                 It's {homeDate} -
                 {homeItems.length > 1 && homeItems.length !== 0 ?

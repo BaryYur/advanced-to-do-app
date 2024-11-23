@@ -18,9 +18,10 @@ import { Calendar } from "../components/ui/calendar";
 import { CalendarDays, X } from "lucide-react";
 
 interface TaskbarProps {
+  taskId: string;
+  taskIndex: number;
   listId: string;
   listName: string;
-  taskId: string;
   task: string;
   isOpen: boolean;
   checked: boolean;
@@ -37,6 +38,7 @@ const TaskBar: React.FC<TaskbarProps> = ({
   listId,
   listName,
   taskId,
+  taskIndex,
   isOpen,
   task,
   checked,
@@ -117,21 +119,23 @@ const TaskBar: React.FC<TaskbarProps> = ({
     if (listName !== selectValue && selectValue !== "") {
       let newColor = "";
       let newListId = "0";
+      let emoji = undefined;
 
       for (let list of todoLists) {
         if (list.listName === selectValue) {
           newColor = list.color;
           newListId = list.id;
+          emoji = list.emoji;
         }
       }
 
-      addTask(selectValue, currentTask, newColor, newListId, finalDate, checked, taskComment, emoji);
+      addTask(taskIndex, selectValue, currentTask, newColor, newListId, finalDate, checked, taskComment, emoji);
       onDelete();
     } else if (selectValue !== "" && listName !== "") {
       changeTask(listId, taskId, currentTask, finalDate, taskComment);
     } else if (selectValue === "") {
       onDelete();
-      addNotNewUncategorizedTask(taskId, currentTask, checked, taskComment, finalDate);
+      addNotNewUncategorizedTask(taskId, taskIndex, currentTask, checked, taskComment, finalDate);
     }
   }
 
@@ -175,127 +179,134 @@ const TaskBar: React.FC<TaskbarProps> = ({
               <X size={15} />
             </Button>
           </div>
-          <div className="mt-[10px]">
-            <form onSubmit={submitHandler}>
-              <Checkbox
-                checked={checked}
-                className="w-[18px] h-[18px] bg-[#e6e6e6] border-none rounded-[6px] top-[68px] left-[24px] absolute z-[1]"
-                onClick={checkTask}
-              />
-              <textarea
-                id="task-input"
-                // rows={activeInput ? taskRows : 1}
-                rows={activeInput ? 5 : 1}
-                value={activeInput || currentTask.length <= 20 ? currentTask : currentTask.slice(0, 20) + "..."}
-                onChange={taskInputHandler}
-                className="
+          <div className="mt-[10px] h-[calc(100%-45px)]">
+            <form onSubmit={submitHandler} className="flex flex-col justify-between h-full">
+              <div>
+                <Checkbox
+                  checked={checked}
+                  className="w-[18px] h-[18px] bg-[#e6e6e6] border-none rounded-[6px] top-[68px] left-[24px] absolute z-[1]"
+                  onClick={checkTask}
+                />
+                <textarea
+                  id="task-input"
+                  // rows={activeInput ? taskRows : 1}
+                  rows={activeInput ? 5 : 1}
+                  value={activeInput || currentTask.length <= 20 ? currentTask : currentTask.slice(0, 20) + "..."}
+                  onChange={taskInputHandler}
+                  className="
                   p-[10px] pl-[34px] w-full rounded-[10px] placeholder-[grey] bg-gray-50 dark:bg-[#2f343d]
                 "
-                style={{
-                  textDecoration: checked && !activeInput ? "line-through" : "none",
-                  textDecorationThickness: "1px",
-                }}
-                onFocus={() => {
-                  setActiveInput(true);
+                  style={{
+                    textDecoration: checked && !activeInput ? "line-through" : "none",
+                    textDecorationThickness: "1px",
+                  }}
+                  onFocus={() => {
+                    setActiveInput(true);
 
-                  taskTextarea();
-                }}
-                onBlur={() => setActiveInput(false)}
-              />
+                    taskTextarea();
+                  }}
+                  onBlur={() => setActiveInput(false)}
+                />
 
-              <div className="p-[10px] bg-gray-100 rounded-[10px] flex flex-col gap-4 dark:bg-[#2f343d]">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-400">List</div>
-                  <div>
-                    <Select
-                      defaultValue={listName === "" ? "" : listName}
-                      onValueChange={(value) => setSelectValue(value)}
-                    >
-                      <SelectTrigger className="h-[30px] min-w-[90px] max-w-[200px] text-xs font-semibold text-gray-700 dark:bg-[#353941] dark:text-neutral-300 px-[7px] border-none">
-                        <SelectValue placeholder={listName ? "No list" : listName} />
-                      </SelectTrigger>
-                      <SelectContent className="right-[23px]">
-                        <SelectGroup>
-                          {todoLists.map(todo => (
-                            <SelectItem
-                              key={Math.random()}
-                              value={todo.listName}
-                            >
-                              <div className="text-xs font-semibold flex justify-start items-center gap-1.5 mr-[5px]">
-                                {!todo.emoji && <div style={{ borderColor: todo.color }} className="border-[2.3px] ml-[2px] min-w-[10px] w-[10px] h-[10px] rounded-[4px]" />}
-                                {todo.emoji && <div className="text-[11px]">{todo.emoji}</div>}
-                                {todo.listName.length > 19 ? todo.listName.slice(0, 19) + "..." : todo.listName}
+                <div className="p-[10px] bg-gray-100 rounded-[10px] flex flex-col gap-4 dark:bg-[#2f343d]">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-400">List</div>
+                    <div>
+                      <Select
+                        defaultValue={listName === "" ? "" : listName}
+                        onValueChange={(value) => setSelectValue(value)}
+                      >
+                        <SelectTrigger className="h-[30px] min-w-[90px] max-w-[200px] text-xs font-semibold text-gray-700 dark:bg-[#353941] dark:text-neutral-300 px-[7px] border-none">
+                          <SelectValue placeholder={listName ? "No list" : listName} />
+                        </SelectTrigger>
+                        <SelectContent className="right-[23px]">
+                          <SelectGroup>
+                            {todoLists.map(todo => (
+                              <SelectItem
+                                key={Math.random()}
+                                value={todo.listName}
+                              >
+                                <div className="text-xs font-semibold flex justify-start items-center gap-1.5 mr-[5px]">
+                                  {!todo.emoji && <div style={{ borderColor: todo.color }} className="border-[2.3px] ml-[2px] min-w-[10px] w-[10px] h-[10px] rounded-[4px]" />}
+                                  {todo.emoji && <div className="text-[11px]">{todo.emoji}</div>}
+                                  {todo.listName.length > 19 ? todo.listName.slice(0, 19) + "..." : todo.listName}
+                                </div>
+                              </SelectItem>
+                            ))}
+                            <SelectItem value="">
+                              <div className="text-xs font-semibold flex items-center gap-1.5 text-s">
+                                <span className="border-gray-300 border-[2.3px] ml-[2px] w-[10px] h-[10px] rounded-[4px] block" />
+                                No list
                               </div>
                             </SelectItem>
-                          ))}
-                          <SelectItem value="">
-                            <div className="text-xs font-semibold flex items-center gap-1.5 text-s">
-                              <span className="border-gray-300 border-[2.3px] ml-[2px] w-[10px] h-[10px] rounded-[4px] block" />
-                              No list
-                            </div>
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-400">Date</div>
-                  <div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          className="h-[30px] dark:bg-[#353941] dark:text-neutral-300 text-xs bg-white hover:bg-white text-gray-700 px-[9px]"
-                        >
-                          <CalendarDays size={16} strokeWidth={3} />
-                          {currentDate !== "" && activeDate && <span className="ml-[5px]">{currentDate}</span>}
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="rounded-[8px] absolute right-[-20px] top-[12px]">
-                        <Calendar
-                          mode="single"
-                          selected={taskDate}
-                          onSelect={(date) => {
-                            setTaskDate(date);
-
-                            if (date) {
-                              setActiveDate(true);
-                            } else {
-                              setActiveDate(false);
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-400">Date</div>
+                    <div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            className="h-[30px] dark:bg-[#353941] dark:text-neutral-300 text-xs bg-white hover:bg-white text-gray-700 px-[9px]"
+                          >
+                            <CalendarDays size={16} strokeWidth={3} />
+                            {(currentDate !== "" && activeDate) ?
+                              <span className="ml-[5px]">{currentDate}</span>:
+                              <span className="ml-[5px]">Schedule</span>
                             }
-                          }}
-                        />
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="rounded-[8px] absolute right-[-45px] top-[12px]">
+                          <Calendar
+                            mode="single"
+                            selected={taskDate}
+                            onSelect={(date) => {
+                              setTaskDate(date);
+
+                              if (date) {
+                                setActiveDate(true);
+                              } else {
+                                setActiveDate(false);
+                              }
+                            }}
+                          />
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <textarea
-                id="comment-input"
-                rows={5}
-                value={taskComment}
-                onChange={(event) => setTaskComment(event.target.value)}
-                placeholder="Write something"
-                className="
+                <textarea
+                  id="comment-input"
+                  rows={5}
+                  value={taskComment}
+                  onChange={(event) => setTaskComment(event.target.value)}
+                  placeholder="Write something"
+                  className="
                   bg-amber-100 bg-opacity-50 p-[10px] rounded-[10px] w-full mt-[10px] text-sm text-gray-500 dark:bg-opacity-10 dark:border-none
                   border-2 border-transparent focus:border-amber-100 placeholder:text-amber-200 dark:text-neutral-50
                 "
-              />
+                />
+              </div>
 
-              <Button
-                type="submit"
-                className="absolute bottom-[60px] left-[15px] w-[300px]"
-                variant="secondary"
-              >Save</Button>
-              <Button
-                variant="outline"
-                className="absolute bottom-[15px] left-[15px] w-[300px] border-none bg-[#ff6b6b1a] text-red-400 hover:text-red-400 hover:bg-[#ff6b6b1a]"
-                onClick={onDelete}
-              >
-                Delete
-              </Button>
+              <div className="flex flex-col gap-[10px]">
+                <Button
+                  type="submit"
+                  className=""
+                  variant="secondary"
+                >Save</Button>
+                <Button
+                  variant="outline"
+                  className="border-none bg-[#ff6b6b1a] text-red-400 hover:text-red-400 hover:bg-[#ff6b6b1a]"
+                  onClick={onDelete}
+                >
+                  Delete
+                </Button>
+              </div>
             </form>
         </div>
       </div>

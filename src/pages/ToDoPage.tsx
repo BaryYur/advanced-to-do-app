@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { List } from "../types";
 
@@ -11,6 +11,21 @@ import FormInput from "../components/FormInput";
 import { CloudSun } from "lucide-react";
 
 import toast, { Toaster } from "react-hot-toast";
+
+// import {
+//   DndContext,
+//   closestCenter,
+//   MouseSensor,
+//   TouchSensor,
+//   DragOverlay,
+//   useSensor,
+//   useSensors,
+//   DragStartEvent,
+//   DragEndEvent,
+// } from "@dnd-kit/core";
+// import { arrayMove, SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
+// import SortableTaskItem from "../components/SortableTaskItem";
+// import DragItem from "../components/DragItem";
 
 const notify = () => toast.error("Task can not be empty.");
 
@@ -29,6 +44,7 @@ const ToDoPage = () => {
 
       if (list.listName.toLowerCase() === params.todo) {
         setCurrentTodo(list);
+        // setItems(list.items);
         setIsCurrentTodoLoaded(true);
       }
     }
@@ -36,13 +52,50 @@ const ToDoPage = () => {
     if (params.todo) return arr.includes(params.todo);
   }
 
+  // const [items, setItems] = useState<Item[]>([]);
+  // const [activeId, setActiveId] = useState<string | null>(null);
+  // const [activeName, setActiveName] = useState<string | null>(null);
+  // const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  //
+  // const handleDragStart = useCallback((event: DragStartEvent) => {
+  //   setActiveId(event.active.id.toString());
+  //   setActiveName("dragging");
+  // }, []);
+
+  //dragging
+  // const handleDragEnd = useCallback((event: DragEndEvent) => {
+  //   const { active, over } = event;
+  //
+  //   if (active.id !== over?.id) {
+  //     setItems((items) => {
+  //       const oldIndex = items.findIndex((item) => item.index === active.id);
+  //       const newIndex = items.findIndex((item) => item.index === over!.id);
+  //
+  //       console.log(active.id);
+  //       const newItems = [...items];
+  //       const [movedItem] = newItems.splice(oldIndex, 1);
+  //       newItems.splice(newIndex, 0, movedItem);
+  //
+  //       // localStorage.setItem("dragItems", JSON.stringify(newItems));
+  //
+  //       return newItems;
+  //     });
+  //   }
+  //
+  //   setActiveId(null);
+  // }, []);
+  //
+  // const handleDragCancel = useCallback(() => {
+  //   setActiveId(null);
+  // }, []);
+
   useEffect(() => {
     if (checkingTodoName() === false) {
       navigate("/app/home");
     }
 
     window.scrollTo(0, 0);
-  }, [params.todo]);
+  }, [params.todo, getHomeTodoItems]);
 
   return (
     <div className="flex justify-end w-[900px] mx-auto py-[70px] todo-container">
@@ -104,6 +157,51 @@ const ToDoPage = () => {
                 emoji={currentTodo.emoji}
               />
             ))}
+
+            {/*<DndContext*/}
+            {/*  sensors={sensors}*/}
+            {/*  collisionDetection={closestCenter}*/}
+            {/*  onDragStart={handleDragStart}*/}
+            {/*  onDragEnd={handleDragEnd}*/}
+            {/*  onDragCancel={handleDragCancel}*/}
+            {/*>*/}
+            {/*  <SortableContext items={items.map((item) => item.index)} strategy={rectSortingStrategy}>*/}
+            {/*    <div className="flex flex-col gap-[2px] mt-[16px] w-full">*/}
+            {/*      {items.map((item, index) => (*/}
+            {/*        <SortableTaskItem*/}
+            {/*          key={item.id}*/}
+            {/*          id={item.id}*/}
+            {/*          index={item.index}*/}
+            {/*          styleIndex={index}*/}
+            {/*          title={item.title}*/}
+            {/*          color={item.color}*/}
+            {/*          isActive={item.isActive}*/}
+            {/*          date={item.date}*/}
+            {/*          listId={item.listId || ""}*/}
+            {/*          taskComment={item.taskComment}*/}
+            {/*          itemsLength={currentTodo.items.length}*/}
+            {/*          emoji={currentTodo.emoji}*/}
+            {/*        />*/}
+            {/*      ))}*/}
+            {/*    </div>*/}
+            {/*  </SortableContext>*/}
+            {/*  <DragOverlay adjustScale style={{ transformOrigin: "0 0" }}>*/}
+            {/*    {activeId ? <DragItem*/}
+            {/*      id={activeId}*/}
+            {/*      title={activeName ?? ""}*/}
+            {/*      index={0}*/}
+            {/*      styleIndex={0}*/}
+            {/*      color=""*/}
+            {/*      isActive={false}*/}
+            {/*      date=""*/}
+            {/*      listId=""*/}
+            {/*      taskComment=""*/}
+            {/*      itemsLength={0}*/}
+            {/*      emoji=""*/}
+            {/*      isDragging*/}
+            {/*    /> : null}*/}
+            {/*  </DragOverlay>*/}
+            {/*</DndContext>*/}
 
             {isCurrentTodoLoaded && currentTodo.items.length === 0 && (
               <div className="flex items-center flex-col gap-2 justify-center text-zinc-300 mt-[150px]">

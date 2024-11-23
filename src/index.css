@@ -84,34 +84,16 @@ textarea::-webkit-scrollbar {
     display: none;
 }
 
-.cl-internal-1ee916m {
-    background-color: #232529;
-}
-
-.cl-internal-tr7twz::-webkit-scrollbar,
-.cl-internal-2tn0z0::-webkit-scrollbar {
-    width: 8px;
+.active-navbar-link .nav-color-box {
     display: block;
 }
 
-.cl-internal-tr7twz::-webkit-scrollbar-thumb,
-.cl-internal-2tn0z0::-webkit-scrollbar-thumb {
-    background-color: #afafaf;
-    border-radius: 3px;
+.active-navbar-link .nav-link-counter {
+    color: rgb(63 63 70);
 }
 
-.cl-internal-1w67h8a {
-    background-color: #232529;
-}
-
-.cl-internal-uyu30o,
-.cl-internal-b3fm6y,
-.cl-internal-hegiim {
-    display: none;
-}
-
-.cl-internal-b3fm6y {
-    border: none;
+.active-navbar-link .dark-nav-link-counter {
+    color: whitesmoke;
 }
 
 @media screen and (min-width: 1090px) {

@@ -157,7 +157,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
       >
         <div className="flex items-center w-[70%] task-item-title">
           <Checkbox
-            className="w-[18px] h-[18px] bg-[#e6e6e6] border-none rounded-[6px]"
+            className={`
+              ${!isActive && "dark:bg-gray-500"}
+              w-[18px] h-[18px] bg-[#e6e6e6] border-none rounded-[6px]
+            `}
             checked={isActive}
             onClick={checkTask}
           />

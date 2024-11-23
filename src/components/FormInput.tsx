@@ -18,7 +18,7 @@ import { Calendar } from "../components/ui/calendar";
 import { CalendarDays } from "lucide-react";
 
 const FormInput = ({ path }: { path: string | undefined }) => {
-  const { todoLists, addTask, uncategorizedItems } = useContext(ListsContext);
+  const { todoLists, addTask, homeItems } = useContext(ListsContext);
   const [task, setTask] = useState("");
   const [selectValue, setSelectValue] = useState("");
   const [date, setDate] = useState<Date | undefined>();
@@ -42,7 +42,7 @@ const FormInput = ({ path }: { path: string | undefined }) => {
     if (selectValue !== "") {
       for (let list of todoLists) {
         if (list.listName.toLowerCase() === selectValue) {
-          addTask(0, list.listName, task, list.color, list.id, taskDate, false, "", list.emoji);
+          addTask(homeItems.length, list.listName, task, list.color, list.id, taskDate, false, "", list.emoji);
         }
       }
     } else {
@@ -85,7 +85,7 @@ const FormInput = ({ path }: { path: string | undefined }) => {
         value={task}
         onChange={(event) => setTask(event.target.value)}
       />
-      <Checkbox checked={false} className="checkbox w-[18px] max-h-[18px] h-[18px] absolute hidden border-none bg-[#e6e6e6] left-[13px] top-[16px] rounded-[6px]" />
+      <Checkbox checked={false} className="checkbox w-[18px] max-h-[18px] h-[18px] absolute hidden border-none bg-[#e6e6e6] left-[13px] top-[16px] rounded-[6px] dark:bg-gray-500" />
 
       <div id="select-box" className="select absolute right-[13px] top-[10px] flex items-center gap-3">
         <DropdownMenu>

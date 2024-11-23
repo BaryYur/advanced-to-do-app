@@ -13,7 +13,7 @@ const SortableTaskItem: FC<DragItemProps> = (props) => {
     setNodeRef,
     transform,
     transition
-  } = useSortable({ id: props.id });
+  } = useSortable({ id: props.index.toString() });
 
   const style = {
     transform: CSS.Transform.toString(transform),

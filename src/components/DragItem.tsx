@@ -7,6 +7,7 @@ export type DragItemProps = HTMLAttributes<HTMLDivElement> & {
   isDragging?: boolean;
 
   index: number;
+  styleIndex: number;
   title: string;
   isActive: boolean;
   color: string;
@@ -24,9 +25,9 @@ const DragItem = forwardRef<HTMLDivElement, DragItemProps>(({
   withOpacity,
   isDragging,
   style,
-
   title,
   index,
+  styleIndex,
   isActive,
   date,
   listId,
@@ -42,16 +43,17 @@ const DragItem = forwardRef<HTMLDivElement, DragItemProps>(({
     opacity: withOpacity ? "0.5" : "1",
     transformOrigin: "50% 50%",
     cursor: isDragging ? "grabbing" : "grab",
-    margin: "1px 0",
-    transform: isDragging ? "scale(1.05)" : "scale(1)",
+    transform: isDragging ? "scale(1.02)" : "scale(1)",
+    borderRadius: isDragging ? "13px" : "",
     ...style,
   }
 
   return (
-    <div ref={ref}>
+    <div ref={ref} {...props} style={inlineStyles}>
       <TaskItem
         id={id}
         title={title}
+        styleIndex={styleIndex}
         index={index}
         isActive={isActive}
         date={date}
