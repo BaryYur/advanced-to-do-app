@@ -95,7 +95,7 @@ const ToDoPage = () => {
     }
 
     window.scrollTo(0, 0);
-  }, [params.todo, getHomeTodoItems, checkingTodoName]);
+  }, [params.todo, getHomeTodoItems, checkingTodoName, navigate]);
 
   return (
     <div className="flex justify-end w-[900px] mx-auto py-[70px] todo-container">

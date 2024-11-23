@@ -34,7 +34,7 @@ const HomePage = () => {
     const formattedDay = daysOfWeek[currentDayOfWeek];
 
     return `${formattedDay} ${formattedMonth}, ${day}`;
-  }, [currentDate, currentDayOfWeek]);
+  }, [currentDate]);
 
   const filteredHomeItems = useMemo(() => {
     if (homeItems.length > 0) {
