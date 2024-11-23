@@ -5,12 +5,12 @@ import ListsContext from "../context/list-context";
 import TaskItem from "../components/TaskItem";
 import FormInput from "../components/FormInput";
 import { Calendar, CloudSun } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
-const notify = () => toast.error("Task can not be empty.");
+// const notify = () => toast.error("Task can not be empty.");
 
 const TodayPage = () => {
-  const { todayItems, getTodayTodoItems, getHomeTodoItems, uncategorizedItems } = useContext(ListsContext);
+  const { todayItems } = useContext(ListsContext);
 
   const todayTaskItems = useMemo(() => {
     if (todayItems.length > 0) {

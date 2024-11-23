@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -22,12 +22,6 @@ interface AlertModalProps {
   newList?: boolean,
   onClose: () => void,
   listEmoji: string | undefined,
-}
-
-const notify = () => {
-  return <div className="relative z-[100]">
-    {toast.error("Task can not be empty.")}
-  </div>
 }
 
 export const ListModal: React.FC<AlertModalProps> = ({

@@ -10,7 +10,7 @@ import TaskItem from "../components/TaskItem";
 import FormInput from "../components/FormInput";
 import { CloudSun } from "lucide-react";
 
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 // import {
 //   DndContext,
@@ -27,12 +27,12 @@ import toast, { Toaster } from "react-hot-toast";
 // import SortableTaskItem from "../components/SortableTaskItem";
 // import DragItem from "../components/DragItem";
 
-const notify = () => toast.error("Task can not be empty.");
+// const notify = () => toast.error("Task can not be empty.");
 
 const ToDoPage = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { todoLists, uncategorizedItems, getTodayTodoItems, getHomeTodoItems } = useContext(ListsContext);
+  const { todoLists, getHomeTodoItems } = useContext(ListsContext);
   const [isCurrentTodoLoaded, setIsCurrentTodoLoaded] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({} as List);
 
@@ -95,7 +95,7 @@ const ToDoPage = () => {
     }
 
     window.scrollTo(0, 0);
-  }, [params.todo, getHomeTodoItems]);
+  }, [params.todo, getHomeTodoItems, checkingTodoName]);
 
   return (
     <div className="flex justify-end w-[900px] mx-auto py-[70px] todo-container">

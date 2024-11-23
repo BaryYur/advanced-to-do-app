@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 
 import { useTheme } from "../components/ThemeProvider";
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import ListsContext from "../context/list-context";
 
@@ -41,10 +41,10 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({
   onCloseBar,
   emoji,
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { theme } = useTheme();
   const { deleteTodoList, removeAllTasks } = useContext(ListsContext);
-  const [activeLink, setActiveLink] = useState(false);
+  // const [activeLink, setActiveLink] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenListModal, setIsOpenListModal] = useState(false);
 

@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
 import { useTheme } from "./ThemeProvider"
-import theme from "tailwindcss/defaultTheme";
 
 export function ModeToggle() {
   const { setTheme } = useTheme()

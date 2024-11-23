@@ -43,8 +43,8 @@ const TaskBar: React.FC<TaskbarProps> = ({
   task,
   checked,
   date,
-  color,
-  emoji,
+  // color,
+  // emoji,
   comment,
   checkTask,
   onClose,
@@ -54,7 +54,7 @@ const TaskBar: React.FC<TaskbarProps> = ({
   const [currentTask, setCurrentTask] = useState(task);
   const [activeInput, setActiveInput] = useState(false);
   const [selectValue, setSelectValue] = useState(listName);
-  const [taskRows, setTaskRows] = useState(1);
+  // const [taskRows, setTaskRows] = useState(1);
   const [taskComment, setTaskComment] = useState(comment);
   const [taskDate, setTaskDate] = useState<Date | undefined>();
   const [currentDate, setCurrentDate] = useState(date);

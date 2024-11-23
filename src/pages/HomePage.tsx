@@ -8,12 +8,12 @@ import TaskItem from "../components/TaskItem";
 import FormInput from "../components/FormInput";
 import { CloudSun } from "lucide-react";
 
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
-const notify = () => toast.error("Task can not be empty.");
+// const notify = () => toast.error("Task can not be empty.");
 
 const HomePage = () => {
-  const { homeItems, getHomeTodoItems, uncategorizedItems, getTodayTodoItems } = useContext(ListsContext);
+  const { homeItems } = useContext(ListsContext);
   const currentDate = useCurrentDate();
 
   const currentD = new Date();
@@ -34,7 +34,7 @@ const HomePage = () => {
     const formattedDay = daysOfWeek[currentDayOfWeek];
 
     return `${formattedDay} ${formattedMonth}, ${day}`;
-  }, [currentDate]);
+  }, [currentDate, currentDayOfWeek]);
 
   const filteredHomeItems = useMemo(() => {
     if (homeItems.length > 0) {
@@ -59,7 +59,7 @@ const HomePage = () => {
     }
 
     return null;
-  }, [homeItems]);
+  }, [homeItems, currentDayOfWeek]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

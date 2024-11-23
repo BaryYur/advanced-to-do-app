@@ -56,12 +56,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
     getTodayTodoItems,
     getCompletedTasks,
     deleteTask,
-    changeTask,
     uncategorizedItems,
     duplicateTask,
   } = useContext(ListContext);
   const [listName, setListName] = useState("");
-  const [taskTitle, setTaskTitle] = useState(title || "");
   const [isOpenTaskbar, setIsOpenTaskbar] = useState(false);
   const [loading, setLoading] = useState(false);
   const currentDate = useCurrentDate();
@@ -247,7 +245,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
         listId={listId}
         listName={listName}
         taskId={id}
-        task={taskTitle}
+        task={title}
         checked={isActive}
         checkTask={checkTask}
         date={date}
