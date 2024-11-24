@@ -34,7 +34,7 @@ const HomePage = () => {
     const formattedDay = daysOfWeek[currentDayOfWeek];
 
     return `${formattedDay} ${formattedMonth}, ${day}`;
-  }, [currentDate]);
+  }, [currentDate, currentDayOfWeek]);
 
   const filteredHomeItems = useMemo(() => {
     if (homeItems.length > 0) {
@@ -59,7 +59,7 @@ const HomePage = () => {
     }
 
     return null;
-  }, [homeItems, currentDayOfWeek]);
+  }, [homeItems]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
