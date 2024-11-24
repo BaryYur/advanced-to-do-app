@@ -116,7 +116,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
     event.stopPropagation();
 
     checkTaskHandler(id, color);
-  }
+  };
 
   const taskItemDate = useMemo(() => {
     const [day, month] = date.split("-");
