@@ -132,7 +132,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
   const deleteTaskHandler = (id: string, listId: string) => {
     deleteTask(id, listId);
-  }
+  };
 
   useEffect(() => {
     getListName();
